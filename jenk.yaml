@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  TransformExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [lambda.amazonaws.com]
+            Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+  TransformFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          import json
+          def lambda_handler(event, context):
+            # TODO implement
+            def sum(a, b):
+              return a + b
+            def difference(a, b):
+              return a - b
+            def product(a, b):
+              return a * b
+            a=5
+            b=2
+            print(sum(a,b))
+            print(difference(a,b))
+            print(product(a,b))
+
+
+      FunctionName: jenkin
+      Handler: index.handler
+      Runtime: python3.7
+      Role: !GetAtt TransformExecutionRole.Arn
